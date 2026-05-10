@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Chat | Gemini AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="setup-overlay" class="overlay">
+        <div class="setup-card">
+            <h1>Connect to Gemini</h1>
+            <p>Enter your Local Server details to begin.</p>
+            <div class="input-group">
+                <label>Cloudflare Tunnel URL</label>
+                <input type="text" id="api-url" placeholder="https://your-tunnel.trycloudflare.com" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>API Key</label>
+                <input type="password" id="api-key" value="gemini_secret_123" autocomplete="off">
+            </div>
+            <button id="start-btn">Connect & Start Chat</button>
+            <p class="hint">Make sure your <code>RUN_ALL.bat</code> is active locally.</p>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="dot"></span>
+                <h1>My Chat</h1>
+            </div>
+            <div class="status-badge" id="conn-status">Connected</div>
+            <button id="settings-btn" class="icon-btn">⚙️</button>
+        </header>
+
+        <main id="chat-messages">
+            <div class="message assistant">
+                Hello! I am connected to your local Gemini instance. How can I help you today?
+            </div>
+        </main>
+
+        <footer>
+            <div class="input-area">
+                <textarea id="user-input" placeholder="Ask anything..." rows="1"></textarea>
+                <button id="send-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
