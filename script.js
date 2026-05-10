@@ -5,9 +5,9 @@ const sendBtn = document.getElementById('send-btn');
 const settingsBtn = document.getElementById('settings-btn');
 const setupOverlay = document.getElementById('setup-overlay');
 
-// HARDCODED CONFIG (Removed the Login/Setup screen requirement)
+// HARDCODED CONFIG (Auto-updated by Manager)
 const config = {
-    url: 'https://acrylic-petersburg-motorcycles-tumor.trycloudflare.com',
+    url: 'https://elections-entries-breeding-talented.trycloudflare.com',
     key: 'gemini_secret_123'
 };
 
@@ -72,7 +72,6 @@ userInput.addEventListener('input', () => {
     userInput.style.height = userInput.scrollHeight + 'px';
 });
 
-// Settings button can still bring back the overlay if needed for debugging
 settingsBtn.addEventListener('click', () => {
     setupOverlay.style.display = 'flex';
     setupOverlay.style.opacity = '1';
