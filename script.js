@@ -1,44 +1,18 @@
 
-const setupOverlay = document.getElementById('setup-overlay');
-const apiUrlInput = document.getElementById('api-url');
-const apiKeyInput = document.getElementById('api-key');
-const startBtn = document.getElementById('start-btn');
 const chatContainer = document.getElementById('chat-messages');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const settingsBtn = document.getElementById('settings-btn');
+const setupOverlay = document.getElementById('setup-overlay');
 
-let config = {
-    url: '',
-    key: ''
+// HARDCODED CONFIG (Removed the Login/Setup screen requirement)
+const config = {
+    url: 'https://acrylic-petersburg-motorcycles-tumor.trycloudflare.com',
+    key: 'gemini_secret_123'
 };
 
-// Load saved config
-const saved = localStorage.getItem('gemini_chat_config');
-if (saved) {
-    const parsed = JSON.parse(saved);
-    apiUrlInput.value = parsed.url;
-    apiKeyInput.value = parsed.key;
-}
-
-startBtn.addEventListener('click', () => {
-    config.url = apiUrlInput.value.trim().replace(/\/$/, "");
-    config.key = apiKeyInput.value.trim();
-
-    if (!config.url) {
-        alert("Please enter your Tunnel URL");
-        return;
-    }
-
-    localStorage.setItem('gemini_chat_config', JSON.stringify(config));
-    setupOverlay.style.opacity = '0';
-    setTimeout(() => setupOverlay.style.display = 'none', 300);
-});
-
-settingsBtn.addEventListener('click', () => {
-    setupOverlay.style.display = 'flex';
-    setTimeout(() => setupOverlay.style.opacity = '1', 10);
-});
+// Instantly hide the setup overlay
+setupOverlay.style.display = 'none';
 
 function appendMessage(role, text) {
     const div = document.createElement('div');
@@ -79,7 +53,7 @@ async function sendMessage() {
         const data = await response.json();
         assistantMsg.textContent = data.choices[0].message.content;
     } catch (error) {
-        assistantMsg.textContent = `Error: ${error.message}. Make sure your local server is running and the Tunnel URL is correct.`;
+        assistantMsg.textContent = `Error: ${error.message}. Ensure your RUN_ALL.bat and Cloudflare Tunnel are active.`;
         assistantMsg.style.color = '#ef4444';
     }
 }
@@ -96,4 +70,10 @@ userInput.addEventListener('keydown', (e) => {
 userInput.addEventListener('input', () => {
     userInput.style.height = 'auto';
     userInput.style.height = userInput.scrollHeight + 'px';
+});
+
+// Settings button can still bring back the overlay if needed for debugging
+settingsBtn.addEventListener('click', () => {
+    setupOverlay.style.display = 'flex';
+    setupOverlay.style.opacity = '1';
 });
