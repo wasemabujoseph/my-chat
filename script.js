@@ -7,7 +7,7 @@ const setupOverlay = document.getElementById('setup-overlay');
 
 // HARDCODED CONFIG (Auto-updated by Manager)
 const config = {
-    url: 'https://elections-entries-breeding-talented.trycloudflare.com',
+    url: 'https://among-focuses-earned-evaluated.trycloudflare.com',
     key: 'gemini_secret_123'
 };
 
@@ -76,3 +76,4 @@ settingsBtn.addEventListener('click', () => {
     setupOverlay.style.display = 'flex';
     setupOverlay.style.opacity = '1';
 });
+
