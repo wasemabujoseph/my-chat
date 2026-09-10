@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Dr Amer Clinic v5 Test</string>
+    <string name="accessibility_desc">Allows this clinic prototype to insert a clinician prompt into Chrome and capture marked JSON from the AI page.</string>
+</resources>
