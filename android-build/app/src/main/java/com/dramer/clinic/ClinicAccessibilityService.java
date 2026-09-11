@@ -196,16 +196,7 @@ public class ClinicAccessibilityService extends AccessibilityService {
 
     private int[] calibratedSendPoint(AccessibilityNodeInfo root,AccessibilityNodeInfo editor,String provider,int attempt){
         Rect rb=new Rect();root.getBoundsInScreen(rb);Rect er=new Rect();editor.getBoundsInScreen(er);
-        int width=Math.max(rb.width(),1),height=Math.max(rb.height(),1);
-        boolean gemini="gemini".equalsIgnoreCase(provider);
-        int x=(int)(rb.left+(gemini?0.145:0.890)*width);
-        int y=er.bottom-46;
-        int minY=rb.top+(int)(height*0.62), maxY=rb.bottom-70;
-        y=Math.max(minY,Math.min(maxY,y));
-        int variation=((attempt/4)%3)-1;
-        x+=variation*16;
-        if(((attempt/8)&1)==1)y-=14;
-        return new int[]{x,y};
+        return SendGeometry.calibrated(rb.left,rb.top,rb.right,rb.bottom,er.bottom,provider,attempt);
     }
 
     private boolean clickNodeOrAncestor(AccessibilityNodeInfo n){
