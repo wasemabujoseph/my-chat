@@ -3,29 +3,47 @@ package com.dramer.clinic;
 import android.content.*;
 import android.net.Uri;
 import android.provider.Settings;
-import java.util.*;
 import java.util.concurrent.*;
 
 public final class AutomationCoordinator {
     public static final class Job {
-        final String provider, prompt;
+        final String provider, prompt, requestId, startMarker, endMarker;
+        final long createdAt=System.currentTimeMillis();
         final CompletableFuture<String> future = new CompletableFuture<>();
         volatile boolean submitted=false;
-        Job(String provider,String prompt){this.provider=provider;this.prompt=prompt;}
+        volatile String phase="CREATED";
+        Job(String provider,String prompt,String requestId,String startMarker,String endMarker){
+            this.provider=provider;this.prompt=prompt;this.requestId=requestId;this.startMarker=startMarker;this.endMarker=endMarker;
+        }
     }
     private static volatile Job current;
     private static final ScheduledExecutorService TIMER=Executors.newSingleThreadScheduledExecutor();
     private AutomationCoordinator(){}
     public static synchronized Job current(){return current;}
-    public static synchronized Job start(Context c,String provider,String prompt){
+    public static synchronized Job start(Context c,String provider,String prompt,String requestId,String startMarker,String endMarker){
         if(!isEnabled(c)) throw new IllegalStateException("فعّل خدمة Accessibility الخاصة بالتطبيق أولاً");
-        if(current!=null && !current.future.isDone()) throw new IllegalStateException("يوجد تحليل قيد التنفيذ");
-        Job j=new Job(provider,prompt); current=j;
-        TIMER.schedule(() -> { if(!j.future.isDone()) j.future.completeExceptionally(new TimeoutException("لم يتم التقاط JSON خلال 100 ثانية")); },100,TimeUnit.SECONDS);
+        if(current!=null && !current.future.isDone()) current.future.completeExceptionally(new CancellationException("تم إلغاء التحليل السابق وبدء تحليل جديد"));
+        Job j=new Job(provider,prompt,requestId,startMarker,endMarker); current=j;
+        TIMER.schedule(() -> {
+            if(!j.future.isDone()){
+                j.phase="TIMEOUT";
+                j.future.completeExceptionally(new TimeoutException("لم يتم التقاط جواب AI خلال 120 ثانية. أعد المحاولة."));
+            }
+        },120,TimeUnit.SECONDS);
         openProvider(c,provider);
+        j.phase="OPENING_"+provider.toUpperCase();
         return j;
     }
-    public static synchronized void complete(Job j,String json){ if(current==j && !j.future.isDone()) j.future.complete(json); }
+    public static synchronized void cancelCurrent(){
+        if(current!=null && !current.future.isDone()) current.future.completeExceptionally(new CancellationException("تم إلغاء التحليل"));
+        current=null;
+    }
+    public static synchronized void complete(Job j,String json){
+        if(current==j && !j.future.isDone()){
+            j.phase="CAPTURED";
+            j.future.complete(json);
+        }
+    }
     public static boolean isEnabled(Context c){
         ComponentName cn=new ComponentName(c,ClinicAccessibilityService.class);
         String enabled=Settings.Secure.getString(c.getContentResolver(),Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
