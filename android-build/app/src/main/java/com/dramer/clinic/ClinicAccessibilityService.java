@@ -1,10 +1,12 @@
 package com.dramer.clinic;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.GestureDescription;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.*;
 import android.view.accessibility.*;
@@ -24,28 +26,53 @@ public class ClinicAccessibilityService extends AccessibilityService {
         AccessibilityNodeInfo root=getRootInActiveWindow(); if(root==null)return;
         CharSequence pkg=root.getPackageName(); if(pkg==null||!pkg.toString().contains("chrome"))return;
         long now=System.currentTimeMillis();
-        if(!j.submitted && now-lastInject>1000){lastInject=now;inject(j,root);}
-        else if(j.submitted && now-lastCapture>900){lastCapture=now;capture(j,root);}
+        if(!j.submitted && !j.sendAttemptInProgress && now-lastInject>900){lastInject=now;injectOrSend(j,root);}
+        else if(j.submitted && now-lastCapture>850){lastCapture=now;capture(j,root);}
     }
 
-    private void inject(AutomationCoordinator.Job j,AccessibilityNodeInfo root){
+    private void injectOrSend(AutomationCoordinator.Job j,AccessibilityNodeInfo root){
         if(AutomationCoordinator.current()!=j||j.future.isDone())return;
         AccessibilityNodeInfo editor=findBestEditor(root);
         if(editor==null){j.phase="WAITING_FOR_AI_COMPOSER";return;}
-        j.phase="COMPOSER_FOUND";
-        boolean ok=setEditorText(editor,j.prompt);
-        if(!ok){j.phase="COMPOSER_SET_TEXT_FAILED";return;}
-        j.phase="PROMPT_INSERTED";
-        h.postDelayed(()->{
-            if(AutomationCoordinator.current()!=j||j.future.isDone())return;
-            AccessibilityNodeInfo r=getRootInActiveWindow();if(r==null)return;
-            AccessibilityNodeInfo send=findBestSend(r);
-            if(send!=null && send.performAction(AccessibilityNodeInfo.ACTION_CLICK)){
-                j.submitted=true;j.phase="PROMPT_SENT";h.postDelayed(()->tick(),1200);
-            }else{
-                j.phase="WAITING_FOR_SEND_BUTTON";
-            }
-        },900);
+        String existing=safeText(editor);
+        if(!existing.contains(j.startMarker)){
+            j.phase="COMPOSER_FOUND";
+            boolean ok=setEditorText(editor,j.prompt);
+            if(!ok){j.phase="COMPOSER_SET_TEXT_FAILED";return;}
+            j.phase="PROMPT_INSERTED";
+            h.postDelayed(()->attemptSend(j),550);
+        }else{
+            j.phase="PROMPT_READY_TO_SEND";
+            attemptSend(j);
+        }
+    }
+
+    private void attemptSend(AutomationCoordinator.Job j){
+        if(AutomationCoordinator.current()!=j||j.future.isDone()||j.submitted||j.sendAttemptInProgress)return;
+        AccessibilityNodeInfo root=getRootInActiveWindow();if(root==null)return;
+        AccessibilityNodeInfo editor=findBestEditor(root);if(editor==null)return;
+        j.sendAttemptInProgress=true;j.sendAttempts++;j.phase="SEND_ATTEMPT_"+j.sendAttempts;
+
+        boolean attempted=false;
+        AccessibilityNodeInfo send=findBestSend(root,editor,j.provider);
+        if(send!=null) attempted=clickNodeOrAncestor(send);
+        if(!attempted) attempted=dispatchFallbackSendTap(editor,j.provider);
+
+        final boolean didAttempt=attempted;
+        h.postDelayed(()->verifySubmitted(j,didAttempt),900);
+    }
+
+    private void verifySubmitted(AutomationCoordinator.Job j,boolean didAttempt){
+        if(AutomationCoordinator.current()!=j||j.future.isDone())return;
+        AccessibilityNodeInfo root=getRootInActiveWindow();
+        if(root==null){j.sendAttemptInProgress=false;return;}
+        AccessibilityNodeInfo editor=findBestEditor(root);
+        boolean promptStillPresent=editor!=null && safeText(editor).contains(j.startMarker);
+        if(didAttempt && !promptStillPresent){
+            j.submitted=true;j.sendAttemptInProgress=false;j.phase="PROMPT_SENT";h.postDelayed(this::tick,900);
+        }else{
+            j.sendAttemptInProgress=false;j.phase="SEND_NOT_CONFIRMED_RETRY";
+        }
     }
 
     private boolean setEditorText(AccessibilityNodeInfo editor,String text){
@@ -94,20 +121,50 @@ public class ClinicAccessibilityService extends AccessibilityService {
                hasAny(meta,"search or type web address","search or type url","address and search bar","بحث أو كتابة عنوان الويب","شريط العنوان والبحث");
     }
 
-    private AccessibilityNodeInfo findBestSend(AccessibilityNodeInfo root){
-        Rect rb=new Rect();root.getBoundsInScreen(rb);int screenBottom=Math.max(rb.bottom,1);
+    private AccessibilityNodeInfo findBestSend(AccessibilityNodeInfo root,AccessibilityNodeInfo editor,String provider){
         ArrayList<AccessibilityNodeInfo> all=new ArrayList<>();collectClickable(root,all,0);
-        AccessibilityNodeInfo best=null;int bestScore=Integer.MIN_VALUE;
+        Rect er=new Rect();editor.getBoundsInScreen(er);
+        AccessibilityNodeInfo explicit=null;int explicitScore=Integer.MIN_VALUE;
+        AccessibilityNodeInfo fallback=null;double fallbackScore=Double.MAX_VALUE;
+        int targetX="gemini".equalsIgnoreCase(provider)?er.left+Math.max(45,er.width()/12):er.right-Math.max(45,er.width()/12);
+        int targetY=er.bottom-Math.max(42,Math.min(90,er.height()/6));
         for(AccessibilityNodeInfo n:all){
+            Rect r=new Rect();n.getBoundsInScreen(r);if(r.isEmpty())continue;
             String m=meta(n).toLowerCase(Locale.ROOT);String id=String.valueOf(n.getViewIdResourceName()).toLowerCase(Locale.ROOT);
-            Rect r=new Rect();n.getBoundsInScreen(r);int cy=(r.top+r.bottom)/2;
-            if(cy < screenBottom*0.25)continue;
-            int score=cy/4;
-            if(hasAny(m,"send message","send","submit","إرسال","ارسال","إرسال الرسالة"))score+=1600;
-            if(hasAny(id,"send","submit"))score+=1400;
-            if(score>bestScore && (hasAny(m,"send","submit","إرسال","ارسال")||hasAny(id,"send","submit"))){bestScore=score;best=n;}
+            if(isChromeAddressUi(m,id))continue;
+            int cx=(r.left+r.right)/2,cy=(r.top+r.bottom)/2;
+            if(hasAny(m,"send message","send prompt","send","submit","إرسال","ارسال","إرسال الرسالة")||hasAny(id,"send","submit")){
+                int s=2000-Math.abs(cy-targetY)-Math.abs(cx-targetX)/2;if(s>explicitScore){explicitScore=s;explicit=n;}
+            }
+            boolean nearComposer=cy>=er.top-60 && cy<=er.bottom+70;
+            boolean saneSize=r.width()<=Math.max(220,er.width()/2) && r.height()<=Math.max(220,er.height());
+            boolean excluded=hasAny(m,"microphone","voice","attach","attachment","add","plus","tools","model","dropdown","camera","photo","mic","ميكروفون")||hasAny(id,"mic","attach","plus","tool","model");
+            if(nearComposer&&saneSize&&!excluded){
+                double dist=Math.hypot(cx-targetX,cy-targetY);
+                if(dist<fallbackScore){fallbackScore=dist;fallback=n;}
+            }
         }
-        return best;
+        return explicit!=null?explicit:fallback;
+    }
+
+    private boolean clickNodeOrAncestor(AccessibilityNodeInfo n){
+        AccessibilityNodeInfo cur=n;
+        for(int i=0;i<5&&cur!=null;i++){
+            try{if((cur.isClickable()||has(cur,AccessibilityNodeInfo.ACTION_CLICK))&&cur.performAction(AccessibilityNodeInfo.ACTION_CLICK))return true;}catch(Exception ignored){}
+            cur=cur.getParent();
+        }
+        return false;
+    }
+
+    private boolean dispatchFallbackSendTap(AccessibilityNodeInfo editor,String provider){
+        try{
+            Rect er=new Rect();editor.getBoundsInScreen(er);if(er.isEmpty())return false;
+            float x="gemini".equalsIgnoreCase(provider)?er.left+Math.max(55,er.width()*0.08f):er.right-Math.max(55,er.width()*0.08f);
+            float y=er.bottom-Math.max(48,Math.min(90,er.height()*0.17f));
+            Path p=new Path();p.moveTo(x,y);
+            GestureDescription.StrokeDescription stroke=new GestureDescription.StrokeDescription(p,0,70);
+            return dispatchGesture(new GestureDescription.Builder().addStroke(stroke).build(),null,null);
+        }catch(Exception ignored){return false;}
     }
 
     private void collectClickable(AccessibilityNodeInfo n,List<AccessibilityNodeInfo> out,int d){
@@ -137,6 +194,7 @@ public class ClinicAccessibilityService extends AccessibilityService {
         for(int i=0;i<n.getChildCount();i++)collectText(n.getChild(i),sb,d+1);
     }
 
+    private String safeText(AccessibilityNodeInfo n){return n!=null&&n.getText()!=null?n.getText().toString():"";}
     private String meta(AccessibilityNodeInfo n){
         StringBuilder s=new StringBuilder();
         if(n.getText()!=null)s.append(' ').append(n.getText());
