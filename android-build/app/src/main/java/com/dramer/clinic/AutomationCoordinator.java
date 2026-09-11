@@ -13,7 +13,9 @@ public final class AutomationCoordinator {
         volatile boolean submitted=false;
         volatile boolean sendAttemptInProgress=false;
         volatile int sendAttempts=0;
+        volatile int sendStage=0;
         volatile String phase="CREATED";
+        volatile String lastSendDetail="";
         Job(String provider,String prompt,String requestId,String startMarker,String endMarker){
             this.provider=provider;this.prompt=prompt;this.requestId=requestId;this.startMarker=startMarker;this.endMarker=endMarker;
         }
@@ -28,10 +30,10 @@ public final class AutomationCoordinator {
         Job j=new Job(provider,prompt,requestId,startMarker,endMarker); current=j;
         TIMER.schedule(() -> {
             if(!j.future.isDone()){
-                j.phase="TIMEOUT";
-                j.future.completeExceptionally(new TimeoutException("لم يتم التقاط جواب AI خلال 120 ثانية. أعد المحاولة."));
+                j.phase="TIMEOUT_"+j.lastSendDetail;
+                j.future.completeExceptionally(new TimeoutException("لم يتم إرسال/التقاط جواب AI خلال 150 ثانية. المرحلة الأخيرة: "+j.phase));
             }
-        },120,TimeUnit.SECONDS);
+        },150,TimeUnit.SECONDS);
         openProvider(c,provider);
         j.phase="OPENING_"+provider.toUpperCase();
         return j;
