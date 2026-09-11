@@ -19,6 +19,9 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
+      - name: Run send regression tests
+        working-directory: android-build
+        run: gradle testDebugUnitTest --stacktrace
       - name: Build debug APK
         working-directory: android-build
         run: gradle assembleDebug --stacktrace
