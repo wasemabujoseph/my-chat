@@ -11,6 +11,8 @@ public final class AutomationCoordinator {
         final long createdAt=System.currentTimeMillis();
         final CompletableFuture<String> future = new CompletableFuture<>();
         volatile boolean submitted=false;
+        volatile boolean sendAttemptInProgress=false;
+        volatile int sendAttempts=0;
         volatile String phase="CREATED";
         Job(String provider,String prompt,String requestId,String startMarker,String endMarker){
             this.provider=provider;this.prompt=prompt;this.requestId=requestId;this.startMarker=startMarker;this.endMarker=endMarker;
