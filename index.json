@@ -4,7 +4,7 @@
     {
       "id": "arabic-sites",
       "name": "Arabic Streaming Sites",
-      "description": "34 candidate links; unverified - test before trusting",
+      "description": "33 candidate links: 14 catalogs web-checked, others require device tests; see audit",
       "type": "sites",
       "url": "https://raw.githubusercontent.com/wasemabujoseph/my-chat/fmhyplay-sources/sites.json"
     }
