@@ -1,0 +1,286 @@
+{
+  "rows": {
+    "movies": [
+      {
+        "name": "Fasel HD",
+        "url": "https://www.fasel-hd.co/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "EgyBest",
+        "url": "https://egybe.st/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "Akwam",
+        "url": "https://akwam.ss/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "ArabSeed",
+        "url": "https://arbsd.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "CimaWebas",
+        "url": "https://cimawebas.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "CimaClub",
+        "url": "https://cimaclub.live/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "MyCima",
+        "url": "https://mycima.house/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "Cima4U",
+        "url": "https://cima4u.college/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "Shahid4U",
+        "url": "https://shahid4u.si/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "ShoFree",
+        "url": "https://shoffree.cc/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "ZaFlam",
+        "url": "https://zaflam.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "CimaFlix",
+        "url": "https://cima-flix.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "ArabFleex",
+        "url": "https://arabfleex.live/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "CimaLight",
+        "url": "https://r.cimalight.co/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "StarCima",
+        "url": "https://starcima.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "CimaNow",
+        "url": "https://cimanow.cc/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "FilmCity",
+        "url": "https://filmcity12.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "Aflaam",
+        "url": "https://aflaam.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "EgyDead",
+        "url": "https://egydead.live/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "MovizLand",
+        "url": "https://movizlands.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "TuktukHD",
+        "url": "https://tuktukhd.com/",
+        "tags": [
+          "Arabic / Subtitled"
+        ],
+        "group": "Arabic sources"
+      }
+    ],
+    "tv": [
+      {
+        "name": "Qisat Ishq",
+        "url": "https://qisatishq.com/",
+        "tags": [
+          "Turkish / Asian Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "DramaCafe",
+        "url": "https://dramacafe-tv.lol/",
+        "tags": [
+          "Turkish / Asian Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "Elif News",
+        "url": "https://r.elif.news/",
+        "tags": [
+          "Turkish / Asian Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "Asia2TV",
+        "url": "https://asia2tv.pw/",
+        "tags": [
+          "Turkish / Asian Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "AsiaTV Drama",
+        "url": "https://asiatvdrama.com/",
+        "tags": [
+          "Turkish / Asian Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      }
+    ],
+    "sports": [],
+    "anime": [
+      {
+        "name": "WitAnime",
+        "url": "https://witanime.life/",
+        "tags": [
+          "Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "Anime3rb",
+        "url": "https://anime3rb.com/",
+        "tags": [
+          "Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "AnimeArabs",
+        "url": "https://animearabs.com/",
+        "tags": [
+          "Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "AnimeLek",
+        "url": "https://animelek.top/",
+        "tags": [
+          "Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "AnimeHQ",
+        "url": "https://animhq.com/",
+        "tags": [
+          "Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "AnimeDar",
+        "url": "https://animedar.net/",
+        "tags": [
+          "Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "OK Anime",
+        "url": "https://okanime.xyz/",
+        "tags": [
+          "Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      },
+      {
+        "name": "ArAnime",
+        "url": "https://aranime.art/",
+        "tags": [
+          "Arabic subtitles"
+        ],
+        "group": "Arabic sources"
+      }
+    ],
+    "live": [],
+    "more": []
+  },
+  "languages": {}
+}
