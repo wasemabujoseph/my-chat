@@ -1,10 +1,10 @@
 {
-  "name": "My FMHYPlay / AnantPlay Source Index",
+  "name": "Arabic Movies & Series — Curated for AnantPlay",
   "sources": [
     {
       "id": "arabic-sites",
-      "name": "Arabic Streaming Sites",
-      "description": "33 candidate links: 14 catalogs web-checked, others require device tests; see audit",
+      "name": "Arabic Movies, Series & Anime",
+      "description": "14 catalog-checked websites; same 11 sites in Movies and TV, plus 3 anime sites; playback not guaranteed",
       "type": "sites",
       "url": "https://raw.githubusercontent.com/wasemabujoseph/my-chat/fmhyplay-sources/sites.json"
     }
