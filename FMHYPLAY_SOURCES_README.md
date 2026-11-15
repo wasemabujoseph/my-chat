@@ -2,7 +2,7 @@
 
 An independent, user-curated source list for the original FMHYPlay / AnantPlay app, without modifying its interface, player, or features.
 
-**34 candidate sites:** 21 movies, 5 Turkish/Asian TV, 8 anime.
+**33 candidate sites:** 21 movies, 5 Turkish/Asian TV, 7 anime.
 
 ## Install
 
@@ -14,7 +14,8 @@ An independent, user-curated source list for the original FMHYPlay / AnantPlay a
 ## Files
 
 - `index.json`: points to the site list on this branch.
-- `sites.json`: 34 candidate homepage links in the upstream `rows` schema.
+- `sites.json`: 33 candidate site links in the upstream `rows` schema.
+- `AUDIT_2026-11-15.md`: outcome of the web-only link checks and corrections.
 
 These are unverified candidate links. Working status, authenticity, safety, copyright permissions and playback compatibility have **not** been confirmed. Avoid misleading redirects, and only use sources you are authorized to access. Adding a source doesn't bypass access controls or DRM.
 
