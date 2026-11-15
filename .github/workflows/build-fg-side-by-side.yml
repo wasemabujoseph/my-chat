@@ -1,0 +1,71 @@
+name: Build AnantPlay FG Side-by-Side
+
+on:
+  push:
+    branches: [fmhyplay-sources]
+    paths:
+      - '.github/workflows/build-fg-side-by-side.yml'
+      - 'patches/AnantPlay_DramaLive_FG_202122_Web.patch'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch original AnantPlay and apply FG patch
+        run: |
+          git clone https://github.com/AnantPlay/android.git anantplay
+          cd anantplay
+          git checkout 4c3c0c9934aa9fba21d1f091fa7af9a662641427
+          git apply --check ../patches/AnantPlay_DramaLive_FG_202122_Web.patch
+          git apply ../patches/AnantPlay_DramaLive_FG_202122_Web.patch
+      - name: Give clone a distinct Android package and app label
+        run: |
+          cd anantplay
+          python3 - <<'PY'
+          from pathlib import Path
+          for root in ("src",):
+              for p in Path(root).rglob("*.java"):
+                  old = p.read_text(encoding="utf-8")
+                  new = old.replace("me.champdev.weblock", "me.champdev.weblockfg")
+                  if new != old: p.write_text(new, encoding="utf-8")
+          mf = Path("AndroidManifest.xml")
+          src = mf.read_text()
+          assert 'package="me.champdev.weblock"' in src
+          src = src.replace('package="me.champdev.weblock"', 'package="me.champdev.weblockfg"')
+          src = src.replace('android:label="AnantPlay"', 'android:label="AnantPlay FG"')
+          mf.write_text(src)
+          print("App ID: me.champdev.weblockfg — can coexist with official AnantPlay")
+          PY
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: anantplay/warp/go.mod
+          cache-dependency-path: anantplay/warp/go.sum
+      - name: Android SDK
+        run: |
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" 'platforms;android-34' 'build-tools;35.0.0' > /dev/null
+      - name: Build WARP
+        working-directory: anantplay
+        run: warp/build.sh
+      - name: Build APKs and verify signing
+        working-directory: anantplay
+        run: |
+          VERSION_NAME=2.22.0-fg-side VERSION_CODE=22291 ./build.sh
+          for f in AnantPlay-*.apk; do
+            "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify "$f"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AnantPlay-FG-Side-by-Side-APKs
+          path: anantplay/AnantPlay-*.apk
+          if-no-files-found: error
