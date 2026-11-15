@@ -1,0 +1,60 @@
+name: Build AnantPlay FG Web Prototype
+
+on:
+  push:
+    branches: [fmhyplay-sources]
+    paths:
+      - 'patches/AnantPlay_DramaLive_FG_202122_Web.patch'
+      - '.github/workflows/build-fg-web.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-apks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout customized source lists and patch
+        uses: actions/checkout@v4
+      - name: Checkout original AnantPlay
+        run: |
+          git clone https://github.com/AnantPlay/android.git anantplay
+          cd anantplay
+          git checkout 4c3c0c9934aa9fba21d1f091fa7af9a662641427
+      - name: Verify and apply minimal patch
+        run: |
+          cd anantplay
+          git apply --check ../patches/AnantPlay_DramaLive_FG_202122_Web.patch
+          git apply ../patches/AnantPlay_DramaLive_FG_202122_Web.patch
+          git diff --check
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: anantplay/warp/go.mod
+          cache-dependency-path: anantplay/warp/go.sum
+      - name: Android SDK
+        run: |
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" 'platforms;android-34' 'build-tools;35.0.0' > /dev/null
+      - name: Build WARP
+        working-directory: anantplay
+        run: warp/build.sh
+      - name: Build phone and TV test APKs
+        working-directory: anantplay
+        run: |
+          VERSION_NAME=2.22.0-fg-web VERSION_CODE=22290 ./build.sh
+      - name: Verify signatures
+        run: |
+          for f in anantplay/AnantPlay-*.apk; do
+            "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify "$f"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AnantPlay-FG-Web-Prototype-APKs
+          path: anantplay/AnantPlay-*.apk
+          if-no-files-found: error
