@@ -3,7 +3,7 @@
     "movies": [
       {
         "name": "Fasel HD",
-        "url": "https://www.fasel-hd.co/",
+        "url": "https://www.fasel-hd.co/movies",
         "tags": [
           "Arabic / Subtitled"
         ],
@@ -11,7 +11,7 @@
       },
       {
         "name": "EgyBest",
-        "url": "https://egybe.st/",
+        "url": "https://iegybest.cimawbas.tv/",
         "tags": [
           "Arabic / Subtitled"
         ],
@@ -75,7 +75,7 @@
       },
       {
         "name": "ShoFree",
-        "url": "https://shoffree.cc/",
+        "url": "https://shoffree.cc/explore",
         "tags": [
           "Arabic / Subtitled"
         ],
@@ -225,14 +225,6 @@
       {
         "name": "Anime3rb",
         "url": "https://anime3rb.com/",
-        "tags": [
-          "Arabic subtitles"
-        ],
-        "group": "Arabic sources"
-      },
-      {
-        "name": "AnimeArabs",
-        "url": "https://animearabs.com/",
         "tags": [
           "Arabic subtitles"
         ],
