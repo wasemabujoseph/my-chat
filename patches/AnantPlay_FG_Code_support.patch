@@ -1,0 +1,169 @@
+diff --git a/src/me/champdev/weblock/Home.java b/src/me/champdev/weblock/Home.java
+--- a/src/me/champdev/weblock/Home.java
++++ b/src/me/champdev/weblock/Home.java
+@@ -1519,24 +1519,61 @@
+         EditText name = WebActivity.field(this, App.t(R.string.home_playlist_name_hint), InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+         TextView stalker = chip(null);   // the dialog's three buttons are taken: Stalker sits under the fields
+         stalker.setText(App.t(R.string.stalker_button));
+-        AlertDialog dlg = new AlertDialog.Builder(this).setTitle(App.t(R.string.home_add_playlist_title)).setMessage(App.t(R.string.home_add_playlist_msg)).setView(WebActivity.box(this, in, name, stalker))
+-            .setPositiveButton(App.t(R.string.home_add), (d, w) -> {
+-                String url = in.getText().toString().trim(), label = name.getText().toString();
+-                if (url.isEmpty()) return;
+-                toast(App.t(R.string.home_downloading_playlist));
+-                Warp.whenSettled(() -> App.io.execute(() -> {
+-                    String err = Iptv.addPlaylist(url, label);
+-                    runOnUiThread(() -> {
+-                        toast(err == null ? App.t(R.string.home_added_iptv) : err);
+-                        build();
+-                    });
+-                    if (err == null) Iptv.sweep();
+-                }));
+-            })
+-            .setNeutralButton(App.t(R.string.home_xtream_login), (d, w) -> xtreamDialog())
+-            .setNegativeButton(android.R.string.cancel, null)
+-            .show();
+-        stalker.setOnClickListener(v -> { dlg.dismiss(); stalkerDialog(); });
++        TextView fg = chip(null);   // optional FG Code import; same IPTV player and storage
++        fg.setText(App.t(R.string.fg_code_button));
++        AlertDialog dlg = new AlertDialog.Builder(this).setTitle(App.t(R.string.home_add_playlist_title)).setMessage(App.t(R.string.home_add_playlist_msg)).setView(WebActivity.box(this, in, name, stalker, fg))
++            .setPositiveButton(App.t(R.string.home_add), (d, w) -> {
++                String url = in.getText().toString().trim(), label = name.getText().toString();
++                if (url.isEmpty()) return;
++                toast(App.t(R.string.home_downloading_playlist));
++                Warp.whenSettled(() -> App.io.execute(() -> {
++                    String err = Iptv.addPlaylist(url, label);
++                    runOnUiThread(() -> {
++                        toast(err == null ? App.t(R.string.home_added_iptv) : err);
++                        build();
++                    });
++                    if (err == null) Iptv.sweep();
++                }));
++            })
++            .setNeutralButton(App.t(R.string.home_xtream_login), (d, w) -> xtreamDialog())
++            .setNegativeButton(android.R.string.cancel, null)
++            .show();
++        stalker.setOnClickListener(v -> { dlg.dismiss(); stalkerDialog(); });
++        fg.setOnClickListener(v -> { dlg.dismiss(); fgCodeDialog(); });
++    }
++
++    /** An FG Code can be imported when it resolves to a genuine M3U playlist. */
++    void fgCodeDialog() {
++        EditText code = WebActivity.field(this, App.t(R.string.fg_code_hint),
++            InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
++        EditText name = WebActivity.field(this, App.t(R.string.home_playlist_name_hint),
++            InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
++        AlertDialog dlg = new AlertDialog.Builder(this).setTitle(App.t(R.string.fg_code_title))
++            .setMessage(App.t(R.string.fg_code_info)).setView(WebActivity.box(this, code, name))
++            .setPositiveButton(App.t(R.string.home_add), null)
++            .setNegativeButton(android.R.string.cancel, null).show();
++        dlg.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
++            String url = FgCode.playlistUrl(code.getText().toString());
++            if (url == null) {
++                code.setError(App.t(R.string.fg_code_invalid));
++                code.requestFocus();
++                return;
++            }
++            String label = name.getText().toString().trim();
++            if (label.isEmpty()) label = "FG Code " + url.substring(url.lastIndexOf('/') + 1);
++            final String finalLabel = label;
++            dlg.dismiss();
++            toast(App.t(R.string.home_downloading_playlist));
++            Warp.whenSettled(() -> App.io.execute(() -> {
++                String err = Iptv.addPlaylist(url, finalLabel);
++                runOnUiThread(() -> {
++                    toast(err == null ? App.t(R.string.home_channels_added)
++                        : err.equals(App.t(R.string.iptv_no_channels)) ? App.t(R.string.fg_code_empty) : err);
++                    build();
++                });
++                if (err == null) Iptv.sweep();
++            }));
++        });
+     }
+ 
+     /** A Stalker (Ministra) portal: its address and the MAC address the provider registered. Its live channels get their own row. */
+diff --git a/res/values/strings_home.xml b/res/values/strings_home.xml
+--- a/res/values/strings_home.xml
++++ b/res/values/strings_home.xml
+@@ -62,6 +62,12 @@
+     <string name="home_downloading_playlist">Downloading playlist…</string>
+     <string name="home_added_iptv">Added to the IPTV tab</string>
+     <string name="home_xtream_login">Xtream login</string>
++    <string name="fg_code_button">FG Code</string>
++    <string name="fg_code_title">Add FG Code</string>
++    <string name="fg_code_hint">FG code or fgcode.org/123456</string>
++    <string name="fg_code_info">Imports channels only if this FG Code returns a real M3U playlist. Codes relying on a Drama Live-specific catalog cannot be imported this way.</string>
++    <string name="fg_code_invalid">Enter an FG Code or a valid fgcode.org/code link</string>
++    <string name="fg_code_empty">This FG Code returned no channels. It may work only in Drama Live or require a provider-supplied M3U.</string>
+     <string name="home_xtream_name_hint">Name, e.g. My provider (shown as its row)</string>
+     <string name="home_xtream_server_hint">Server, e.g. http://example.com:8080</string>
+     <string name="home_username">Username</string>
+diff --git a/src/me/champdev/weblock/FgCode.java b/src/me/champdev/weblock/FgCode.java
+new file mode 100644
+--- /dev/null
++++ b/src/me/champdev/weblock/FgCode.java
+@@ -0,0 +1,32 @@
++package me.champdev.weblock;
++
++import java.net.URI;
++import java.net.URISyntaxException;
++
++/**
++ * Normalizes a user-supplied FG Code into its standard M3U link.
++ * This does not access any private Drama Live APIs or turn an empty FG playlist
++ * into channels. The existing Iptv.addPlaylist() validates actual M3U data.
++ */
++final class FgCode {
++    private FgCode() { }
++
++    static String playlistUrl(String input) {
++        if (input == null) return null;
++        String s = input.trim();
++        if (s.matches("[A-Za-z0-9_-]{3,64}")) return "https://fgcode.org/" + s;
++        if (!s.matches("(?i)^https?://.*")) s = "https://" + s;
++        try {
++            URI uri = new URI(s);
++            String host = uri.getHost(), path = uri.getRawPath();
++            if (host == null || !(host.equalsIgnoreCase("fgcode.org") || host.equalsIgnoreCase("www.fgcode.org"))) return null;
++            if (!uri.getScheme().equalsIgnoreCase("http") && !uri.getScheme().equalsIgnoreCase("https")) return null;
++            if (uri.getUserInfo() != null || uri.getPort() >= 0 || uri.getRawQuery() != null || uri.getRawFragment() != null) return null;
++            if (path == null || !path.matches("/[A-Za-z0-9_-]{3,64}/?")) return null;
++            String code = path.substring(1).replaceFirst("/$", "");
++            return "https://fgcode.org/" + code;
++        } catch (URISyntaxException e) {
++            return null;
++        }
++    }
++}
+diff --git a/test/FgCodeTest.java b/test/FgCodeTest.java
+new file mode 100644
+--- /dev/null
++++ b/test/FgCodeTest.java
+@@ -0,0 +1,28 @@
++package me.champdev.weblock;
++
++public final class FgCodeTest {
++    static void eq(String expected, String actual) {
++        if (expected == null ? actual != null : !expected.equals(actual))
++            throw new AssertionError("Expected " + expected + ", got " + actual);
++    }
++    public static void main(String[] args) {
++        String expect = "https://fgcode.org/202122";
++        eq(expect, FgCode.playlistUrl("202122"));
++        eq(expect, FgCode.playlistUrl("fgcode.org/202122"));
++        eq(expect, FgCode.playlistUrl("http://fgcode.org/202122"));
++        eq(expect, FgCode.playlistUrl("https://www.fgcode.org/202122/"));
++        eq(expect, FgCode.playlistUrl(" https://fgcode.org/202122 "));
++        eq("https://fgcode.org/abc_123", FgCode.playlistUrl("abc_123"));
++        eq(null, FgCode.playlistUrl(null));
++        eq(null, FgCode.playlistUrl(""));
++        eq(null, FgCode.playlistUrl("fgcode.org"));
++        eq(null, FgCode.playlistUrl("fgcode.org/202122?q=1"));
++        eq(null, FgCode.playlistUrl("fgcode.org/202122#fragment"));
++        eq(null, FgCode.playlistUrl("https://attacker.example/202122"));
++        eq(null, FgCode.playlistUrl("https://fgcode.org.evil.example/202122"));
++        eq(null, FgCode.playlistUrl("https://user:pw@fgcode.org/202122"));
++        eq(null, FgCode.playlistUrl("https://fgcode.org:443/202122"));
++        eq(null, FgCode.playlistUrl("https://fgcode.org/202122/other"));
++        System.out.println("FG Code URL parser: 16 tests passed");
++    }
++}
