@@ -3,8 +3,8 @@
   "sources": [
     {
       "id": "arabic-sites",
-      "name": "Arabic Movies, Series & Anime",
-      "description": "14 catalog-checked websites; same 11 sites in Movies and TV, plus 3 anime sites; playback not guaranteed",
+      "name": "Arabic Movies & Series (18 sites)",
+      "description": "18 curated Arabic-friendly sites shown in BOTH Movies and TV; no anime sources; catalog checks only",
       "type": "sites",
       "url": "https://raw.githubusercontent.com/wasemabujoseph/my-chat/fmhyplay-sources/sites.json"
     }
