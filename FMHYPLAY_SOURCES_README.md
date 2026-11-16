@@ -1,41 +1,26 @@
-# FMHYPlay / AnantPlay — Curated Arabic Sources
+# FMHYPlay / AnantPlay — Arabic Movies & Series Sources
 
-A focused external source index for the **unchanged upstream AnantPlay app**.
+User-curated external site source list for **unmodified AnantPlay**. This repository does NOT modify the APK, UI, ExoPlayer, WARP, subtitles, downloads, or settings.
 
-Last link/catalog review: **2026-11-15**.
+## Current configuration (2026-11-16)
+- **18 sites for Movies**
+- **The exact same 18 sites for TV/Series** (same order and addresses)
+- **0 Anime sites** (the app's original Anime navigation tab still exists)
+- The **same index URL and source ID** are retained for installed users.
 
-## What is included
+### Install or refresh
+1. Open **Settings → Sources** in AnantPlay.
+2. If the index is not already added, select **Add an index by link** and paste `https://raw.githubusercontent.com/wasemabujoseph/my-chat/fmhyplay-sources/index.json`.
+3. Add source **Arabic Movies & Series (18 sites)**.
+4. If installed already, simply use **Settings → Sites → Refresh sources**; no second index is required. The app also periodically refreshes sources.
 
-- **11 shared movie-and-series websites**, listed in both the Movies and TV tabs. The two sections contain exactly the same URLs in the same order.
-- **3 anime websites** in the Anime tab.
-- **14 unique website URLs** in total.
-- Only external source configuration changed: no Android APK, player, styling, TV controls, update system, downloads, subtitles, or WARP code was modified.
+### Files
+- `index.json`: app-compatible source index, with the prior stable `arabic-sites` source ID.
+- `sites.json`: current sites, identical Movies and TV rows, empty Anime row.
+- `SOURCE_REVIEW_2026-11-16.md`: **current** web research and individual link caveats.
+- `SOURCE_REVIEW_2026-11-15.md` / `AUDIT_2026-11-15.md`: historical/superseded reports.
 
-## Install / refresh
+### Verification
+Web checks confirm that sites displayed relevant movie/series catalogs and navigation or indexed title pages at review time, not that links are safe, officially owned, licensed, or playable in AnantPlay. Some sites are currently accessible only via category URLs; some may use unstable redirects, misleading ads or require login. Only watch content you are authorized to access, do not enter credentials on unexpected mirrors, and do not assume a site's claimed release dates are true.
 
-1. In AnantPlay, open **Settings → Sources**.
-2. If not already installed, select **Add an index by link** and paste:
-
-   `https://raw.githubusercontent.com/wasemabujoseph/my-chat/fmhyplay-sources/index.json`
-
-3. Select **Arabic Movies, Series & Anime** and tap **Add**.
-4. If already installed, do **not** add another index: use **Settings → Sites → Refresh sources**. The upstream application also refreshes source files periodically (normally every 12 hours).
-
-## Repository files
-
-| File | Purpose |
-| --- | --- |
-| `index.json` | AnantPlay-compatible source index, preserving the same URL and source ID as the previous version |
-| `sites.json` | App-compatible `rows` structure: same 11 sites in both `movies` and `tv`, plus 3 anime |
-| `SOURCE_REVIEW_2026-11-15.md` | Selection criteria, what was tested, and source-by-source caveats |
-| `AUDIT_2026-11-15.md` | Historical audit of the **older 33-site** list; **superseded** |
-
-## Verification standard
-
-A site is included only if a web check on November 15, 2026 showed an accessible relevant catalog/search or recognizable film/series categories.
-
-**Catalog verification is not playback verification.** Website access can differ by country, device, IP or time, and page redirects may change. The verification does not establish that the publisher is legitimate, secure, licensed, or free of risky ads. Only use content you have the right to view; do not enter private credentials on unexpected mirrors or download third-party apps from them.
-
-The upstream code and source format are documented here:
-- https://github.com/AnantPlay/android
-- https://github.com/AnantPlay/index
+Upstream spec: https://github.com/AnantPlay/index
