@@ -22,6 +22,26 @@
         "group": "Movies & Series"
       },
       {
+        "name": "WeCima",
+        "url": "https://wecima.cx/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
+        "name": "MyCima",
+        "url": "https://www.mycima.si/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
         "name": "Akwam",
         "url": "https://akwam.ss/",
         "tags": [
@@ -32,8 +52,8 @@
         "group": "Movies & Series"
       },
       {
-        "name": "CimaClub",
-        "url": "https://cimaclub.live/",
+        "name": "ArabSeed",
+        "url": "https://arabseeds.watch/main/",
         "tags": [
           "Arabic",
           "Movies",
@@ -52,6 +72,26 @@
         "group": "Movies & Series"
       },
       {
+        "name": "CimaClub",
+        "url": "https://cimaclub.live/",
+        "tags": [
+          "Arabic",
+          "Movies",
+          "Series"
+        ],
+        "group": "Movies & Series"
+      },
+      {
+        "name": "CimaWebas",
+        "url": "https://cimawebas.com/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
         "name": "ShoFree",
         "url": "https://shoffree.cc/explore",
         "tags": [
@@ -62,14 +102,44 @@
         "group": "Movies & Series"
       },
       {
-        "name": "ArabSeed",
-        "url": "https://arabseeds.watch/main/",
+        "name": "CimaMix",
+        "url": "https://cimamix.net/",
+        "group": "Arabic Movies & Series",
         "tags": [
-          "Arabic",
           "Movies",
-          "Series"
-        ],
-        "group": "Movies & Series"
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
+        "name": "Shahid4U",
+        "url": "https://www.shahid4u.si/arabic/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
+        "name": "CimaFlash",
+        "url": "https://www.cimaflash.si/arabic/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
+        "name": "CimaCima",
+        "url": "https://cimacima.online/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
       },
       {
         "name": "ZaFlam",
@@ -135,6 +205,26 @@
         "group": "Movies & Series"
       },
       {
+        "name": "WeCima",
+        "url": "https://wecima.cx/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
+        "name": "MyCima",
+        "url": "https://www.mycima.si/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
         "name": "Akwam",
         "url": "https://akwam.ss/",
         "tags": [
@@ -145,8 +235,8 @@
         "group": "Movies & Series"
       },
       {
-        "name": "CimaClub",
-        "url": "https://cimaclub.live/",
+        "name": "ArabSeed",
+        "url": "https://arabseeds.watch/main/",
         "tags": [
           "Arabic",
           "Movies",
@@ -165,6 +255,26 @@
         "group": "Movies & Series"
       },
       {
+        "name": "CimaClub",
+        "url": "https://cimaclub.live/",
+        "tags": [
+          "Arabic",
+          "Movies",
+          "Series"
+        ],
+        "group": "Movies & Series"
+      },
+      {
+        "name": "CimaWebas",
+        "url": "https://cimawebas.com/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
         "name": "ShoFree",
         "url": "https://shoffree.cc/explore",
         "tags": [
@@ -175,14 +285,44 @@
         "group": "Movies & Series"
       },
       {
-        "name": "ArabSeed",
-        "url": "https://arabseeds.watch/main/",
+        "name": "CimaMix",
+        "url": "https://cimamix.net/",
+        "group": "Arabic Movies & Series",
         "tags": [
-          "Arabic",
           "Movies",
-          "Series"
-        ],
-        "group": "Movies & Series"
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
+        "name": "Shahid4U",
+        "url": "https://www.shahid4u.si/arabic/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
+        "name": "CimaFlash",
+        "url": "https://www.cimaflash.si/arabic/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
+      },
+      {
+        "name": "CimaCima",
+        "url": "https://cimacima.online/",
+        "group": "Arabic Movies & Series",
+        "tags": [
+          "Movies",
+          "Series",
+          "Arabic subtitles"
+        ]
       },
       {
         "name": "ZaFlam",
@@ -227,35 +367,7 @@
       }
     ],
     "sports": [],
-    "anime": [
-      {
-        "name": "Anime3rb",
-        "url": "https://anime3rb.com/",
-        "tags": [
-          "Arabic subtitles",
-          "Anime"
-        ],
-        "group": "Arabic Anime"
-      },
-      {
-        "name": "AnimeDar",
-        "url": "https://web.animedar.net/",
-        "tags": [
-          "Arabic subtitles",
-          "Anime"
-        ],
-        "group": "Arabic Anime"
-      },
-      {
-        "name": "AnimeHQ",
-        "url": "https://animhq.com/",
-        "tags": [
-          "Arabic subtitles",
-          "Anime"
-        ],
-        "group": "Arabic Anime"
-      }
-    ],
+    "anime": [],
     "live": [],
     "more": []
   },
